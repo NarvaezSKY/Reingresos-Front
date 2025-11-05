@@ -2,30 +2,16 @@
 
 import type React from "react"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useUploadReingreso } from "@/src/hooks/useUploadReingreso"
+import { toast } from "sonner"
 
 export function ReingresoForm() {
-  const [formData, setFormData] = useState({
-    año: "",
-    fechaRegistro: "",
-    codigoCentro: "",
-    centroFormacion: "",
-    tipoDocumento: "",
-    numeroDocumento: "",
-    aspirante: "",
-    numeroActa: "",
-    numeroResolucion: "",
-    fechaSolicitud: "",
-    fichaOrigen: "",
-    fichaDestino: "",
-    opcionAplicada: "",
-    estadoSofia: "",
-  })
+  const { formData, loading, error, setFormField, submitReingreso, resetForm } = useUploadReingreso()
 
   const centrosFormacion = {
     "9307": "CENTRO DE COMERCIO Y SERVICIOS",
@@ -34,17 +20,36 @@ export function ReingresoForm() {
   }
 
   const handleCodigoCentroChange = (codigo: string) => {
-    setFormData({
-      ...formData,
-      codigoCentro: codigo,
-      centroFormacion: centrosFormacion[codigo as keyof typeof centrosFormacion] || ""
-    })
+    setFormField("codigoCentro", codigo)
+    setFormField("centroFormacion", centrosFormacion[codigo as keyof typeof centrosFormacion] || "")
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Form submitted:", formData)
-    // Handle form submission logic here
+    
+    await submitReingreso(
+      (response) => {
+        // Success callback
+        if (response.success) {
+          toast.success("Reingreso enviado exitosamente", {
+            description: response.message || "Su solicitud ha sido procesada correctamente"
+          })
+          // Limpiar formulario automáticamente después del envío exitoso
+          resetForm()
+        } else {
+          toast.error("Error al enviar", {
+            description: response.message || "Ocurrió un error al procesar su solicitud"
+          })
+        }
+      },
+      (error) => {
+        // Error callback
+        toast.error("Error de conexión", {
+          description: "No se pudo conectar con el servidor. Intente nuevamente."
+        })
+        console.error("Error submitting reingreso:", error)
+      }
+    )
   }
 
   return (
@@ -63,7 +68,7 @@ export function ReingresoForm() {
               <Label htmlFor="año" className="text-sm font-semibold text-foreground">
                 Año
               </Label>
-              <Select value={formData.año} onValueChange={(value) => setFormData({ ...formData, año: value })}>
+              <Select value={formData.año} onValueChange={(value) => setFormField("año", value)}>
                 <SelectTrigger id="año" className="h-11 border-2 focus:border-primary">
                   <SelectValue placeholder="Seleccione año" />
                 </SelectTrigger>
@@ -85,7 +90,7 @@ export function ReingresoForm() {
                 type="date"
                 className="h-11 border-2 focus:border-primary"
                 value={formData.fechaRegistro}
-                onChange={(e) => setFormData({ ...formData, fechaRegistro: e.target.value })}
+                onChange={(e) => setFormField("fechaRegistro", e.target.value)}
               />
             </div>
 
@@ -128,7 +133,7 @@ export function ReingresoForm() {
               </Label>
               <Select
                 value={formData.tipoDocumento}
-                onValueChange={(value) => setFormData({ ...formData, tipoDocumento: value })}
+                onValueChange={(value) => setFormField("tipoDocumento", value)}
               >
                 <SelectTrigger id="tipoDocumento" className="h-11 border-2 focus:border-primary">
                   <SelectValue placeholder="Seleccione tipo" />
@@ -152,7 +157,7 @@ export function ReingresoForm() {
                 placeholder="Ingrese número"
                 className="h-11 border-2 focus:border-primary"
                 value={formData.numeroDocumento}
-                onChange={(e) => setFormData({ ...formData, numeroDocumento: e.target.value })}
+                onChange={(e) => setFormField("numeroDocumento", e.target.value)}
               />
             </div>
 
@@ -167,7 +172,7 @@ export function ReingresoForm() {
                 placeholder="Nombre completo del aspirante"
                 className="h-11 border-2 focus:border-primary"
                 value={formData.aspirante}
-                onChange={(e) => setFormData({ ...formData, aspirante: e.target.value })}
+                onChange={(e) => setFormField("aspirante", e.target.value)}
               />
             </div>
 
@@ -182,7 +187,7 @@ export function ReingresoForm() {
                 placeholder="https://..."
                 className="h-11 border-2 focus:border-primary"
                 value={formData.numeroActa}
-                onChange={(e) => setFormData({ ...formData, numeroActa: e.target.value })}
+                onChange={(e) => setFormField("numeroActa", e.target.value)}
               />
             </div>
 
@@ -198,10 +203,7 @@ export function ReingresoForm() {
                 className="h-11 border-2 focus:border-primary"
                 value={formData.numeroResolucion}
                 onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    numeroResolucion: e.target.value,
-                  })
+                  setFormField("numeroResolucion", e.target.value)
                 }
               />
             </div>
@@ -216,7 +218,7 @@ export function ReingresoForm() {
                 type="date"
                 className="h-11 border-2 focus:border-primary"
                 value={formData.fechaSolicitud}
-                onChange={(e) => setFormData({ ...formData, fechaSolicitud: e.target.value })}
+                onChange={(e) => setFormField("fechaSolicitud", e.target.value)}
               />
             </div>
 
@@ -231,7 +233,7 @@ export function ReingresoForm() {
                 placeholder="Ingrese número"
                 className="h-11 border-2 focus:border-primary"
                 value={formData.fichaOrigen}
-                onChange={(e) => setFormData({ ...formData, fichaOrigen: e.target.value })}
+                onChange={(e) => setFormField("fichaOrigen", e.target.value)}
               />
             </div>
 
@@ -246,7 +248,7 @@ export function ReingresoForm() {
                 placeholder="Ingrese número"
                 className="h-11 border-2 focus:border-primary"
                 value={formData.fichaDestino}
-                onChange={(e) => setFormData({ ...formData, fichaDestino: e.target.value })}
+                onChange={(e) => setFormField("fichaDestino", e.target.value)}
               />
             </div>
 
@@ -257,7 +259,7 @@ export function ReingresoForm() {
               </Label>
               <Select
                 value={formData.opcionAplicada}
-                onValueChange={(value) => setFormData({ ...formData, opcionAplicada: value })}
+                onValueChange={(value) => setFormField("opcionAplicada", value)}
               >
                 <SelectTrigger id="opcionAplicada" className="h-11 border-2 focus:border-primary">
                   <SelectValue placeholder="Seleccione opción" />
@@ -276,7 +278,7 @@ export function ReingresoForm() {
               </Label>
               <Select
                 value={formData.estadoSofia}
-                onValueChange={(value) => setFormData({ ...formData, estadoSofia: value })}
+                onValueChange={(value) => setFormField("estadoSofia", value)}
               >
                 <SelectTrigger id="estadoSofia" className="h-11 border-2 focus:border-primary">
                   <SelectValue placeholder="Seleccione estado" />
@@ -293,15 +295,35 @@ export function ReingresoForm() {
           </div>
 
           {/* Submit Button */}
-          <div className="flex justify-center pt-6">
+          <div className="flex justify-center items-center gap-4 pt-6">
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              onClick={resetForm}
+              disabled={loading}
+              className="w-full md:w-auto px-16 h-12 border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              Limpiar Formulario
+            </Button>
             <Button
               type="submit"
               size="lg"
-              className="w-full md:w-auto px-16 h-12 bg-primary hover:bg-primary/90 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+              disabled={loading}
+              className="w-full md:w-auto px-16 h-12 bg-primary hover:bg-primary/90 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
-              Subir Formulario
+              {loading ? "Enviando..." : "Subir Formulario"}
             </Button>
           </div>
+          
+          {/* Error display */}
+          {error && (
+            <div className="flex justify-center pt-4">
+              <div className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-md p-3 max-w-md text-center">
+                {error}
+              </div>
+            </div>
+          )}
         </form>
       </CardContent>
     </Card>

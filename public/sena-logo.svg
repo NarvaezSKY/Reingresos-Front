@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="#00A651" stroke="#FFFFFF" stroke-width="2"/>
+  
+  <!-- SENA text -->
+  <text x="32" y="26" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">SENA</text>
+  
+  <!-- Subtitle -->
+  <text x="32" y="38" font-family="Arial, sans-serif" font-size="6" text-anchor="middle" fill="white">COLOMBIA</text>
+  
+  <!-- Decorative elements -->
+  <circle cx="32" cy="44" r="2" fill="#FFD700"/>
+  <rect x="26" y="16" width="12" height="2" rx="1" fill="#FFD700"/>
+</svg>
