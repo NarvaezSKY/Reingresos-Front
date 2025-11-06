@@ -15,7 +15,7 @@ export function ReingresoForm() {
 
   const centrosFormacion = {
     "9307": "CENTRO DE COMERCIO Y SERVICIOS",
-    "9221": "CENTRO DE TELEINFORMATICA Y PRODUCCIÓN INDUSTRIAL", 
+    "9221": "CENTRO DE TELEINFORMATICA Y PRODUCCIÓN INDUSTRIAL",
     "9113": "CENTRO AGROPECUARIO"
   }
 
@@ -26,7 +26,7 @@ export function ReingresoForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     await submitReingreso(
       (response) => {
         // Success callback
@@ -179,15 +179,30 @@ export function ReingresoForm() {
             {/* N° Acta */}
             <div className="space-y-3">
               <Label htmlFor="numeroActa" className="text-sm font-semibold text-foreground">
-                N° Acta (URL)
+                N° Acta
               </Label>
               <Input
                 id="numeroActa"
-                type="url"
-                placeholder="https://..."
+                type="number"
+                placeholder="Ingrese número de acta"
                 className="h-11 border-2 focus:border-primary"
                 value={formData.numeroActa}
                 onChange={(e) => setFormField("numeroActa", e.target.value)}
+              />
+            </div>
+
+            {/* Carpeta URL */}
+            <div className="space-y-3">
+              <Label htmlFor="carpetaURL" className="text-sm font-semibold text-foreground">
+                Enlace de la carpeta
+              </Label>
+              <Input
+                id="carpetaURL"
+                type="url"
+                placeholder="https://..."
+                className="h-11 border-2 focus:border-primary"
+                value={formData.carpetaURL || ""}
+                onChange={(e) => setFormField("carpetaURL", e.target.value)}
               />
             </div>
 
@@ -302,7 +317,7 @@ export function ReingresoForm() {
               size="lg"
               onClick={resetForm}
               disabled={loading}
-              className="w-full md:w-auto px-16 h-12 border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="cursor-pointer w-full md:w-auto px-16 h-12 border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               Limpiar Formulario
             </Button>
@@ -310,12 +325,26 @@ export function ReingresoForm() {
               type="submit"
               size="lg"
               disabled={loading}
-              className="w-full md:w-auto px-16 h-12 bg-primary hover:bg-primary/90 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="cursor-pointer w-full md:w-auto px-16 h-12 bg-primary hover:bg-primary/90 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {loading ? "Enviando..." : "Subir Formulario"}
             </Button>
           </div>
-          
+
+          {/* Power BI Button */}
+          <div className="flex justify-center pt-4">
+            <Button
+              type="button"
+              variant="outline"
+
+              size="lg"
+              onClick={() => window.open("https://app.powerbi.com/view?r=eyJrIjoiODhhOWMzMmEtZWM2Ny00YjBlLTlmMDUtMzUzMWYyNTBmMzQyIiwidCI6ImNiYzJjMzgxLTJmMmUtNGQ5My05MWQxLTUwNmM5MzE2YWNlNyIsImMiOjR9", "_blank")}
+              className="w-full md:w-auto px-16 h-12 border-2 cursor-pointer border-primary text-primary hover:bg-primary hover:text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              Consultar Power BI
+            </Button>
+          </div>
+
           {/* Error display */}
           {error && (
             <div className="flex justify-center pt-4">

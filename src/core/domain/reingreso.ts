@@ -7,6 +7,7 @@ export type ReingresoCreateRequest = {
   numeroDocumento: string
   aspirante: string
   numeroActa?: string
+  carpetaURL?: string
   numeroResolucion?: string
   fechaSolicitud?: string
   fichaOrigen?: string

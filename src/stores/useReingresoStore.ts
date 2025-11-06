@@ -20,6 +20,7 @@ const initialForm: ReingresoCreateRequest = {
   numeroDocumento: "",
   aspirante: "",
   numeroActa: "",
+  carpetaURL: "",
   numeroResolucion: "",
   fechaSolicitud: "",
   fichaOrigen: "",
