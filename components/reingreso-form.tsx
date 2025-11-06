@@ -19,6 +19,21 @@ export function ReingresoForm() {
     "9113": "CENTRO AGROPECUARIO"
   }
 
+  const validateForm = () => {
+    const requiredFields = [
+      'año', 'fechaRegistro', 'codigoCentro', 'centroFormacion', 'tipoDocumento',
+      'numeroDocumento', 'aspirante', 'numeroActa', 'carpetaURL', 'numeroResolucion',
+      'fechaSolicitud', 'fichaOrigen', 'fichaDestino', 'opcionAplicada', 'estadoSofia'
+    ]
+    
+    for (const field of requiredFields) {
+      if (!formData[field as keyof typeof formData] || formData[field as keyof typeof formData].trim() === '') {
+        return false
+      }
+    }
+    return true
+  }
+
   const handleCodigoCentroChange = (codigo: string) => {
     setFormField("codigoCentro", codigo)
     setFormField("centroFormacion", centrosFormacion[codigo as keyof typeof centrosFormacion] || "")
@@ -26,6 +41,14 @@ export function ReingresoForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validar que todos los campos estén llenos
+    if (!validateForm()) {
+      toast.error("Campos requeridos", {
+        description: "Por favor complete todos los campos antes de enviar el formulario"
+      })
+      return
+    }
 
     await submitReingreso(
       (response) => {
@@ -57,7 +80,7 @@ export function ReingresoForm() {
       <CardHeader className="bg-linear-to-r from-primary to-primary/90 text-white py-8">
         <CardTitle className="text-3xl font-bold text-center text-balance">Formulario para Reingresos</CardTitle>
         <p className="text-center text-white/90 mt-2 text-sm">
-          Complete todos los campos requeridos para procesar su solicitud
+          Complete todos los campos requeridos (*) para procesar su solicitud
         </p>
       </CardHeader>
       <CardContent className="p-8 md:p-10">
@@ -66,9 +89,9 @@ export function ReingresoForm() {
             {/* Año */}
             <div className="space-y-3">
               <Label htmlFor="año" className="text-sm font-semibold text-foreground">
-                Año
+                Año *
               </Label>
-              <Select value={formData.año} onValueChange={(value) => setFormField("año", value)}>
+              <Select value={formData.año} onValueChange={(value) => setFormField("año", value)} required>
                 <SelectTrigger id="año" className="h-11 border-2 focus:border-primary">
                   <SelectValue placeholder="Seleccione año" />
                 </SelectTrigger>
@@ -83,7 +106,7 @@ export function ReingresoForm() {
             {/* Fecha de Registro */}
             <div className="space-y-3">
               <Label htmlFor="fechaRegistro" className="text-sm font-semibold text-foreground">
-                Fecha de Registro
+                Fecha de Registro *
               </Label>
               <Input
                 id="fechaRegistro"
@@ -91,15 +114,16 @@ export function ReingresoForm() {
                 className="h-11 border-2 focus:border-primary"
                 value={formData.fechaRegistro}
                 onChange={(e) => setFormField("fechaRegistro", e.target.value)}
+                required
               />
             </div>
 
             {/* Código Centro Formación */}
             <div className="space-y-3">
               <Label htmlFor="codigoCentro" className="text-sm font-semibold text-foreground">
-                Código Centro Formación
+                Código Centro Formación *
               </Label>
-              <Select value={formData.codigoCentro} onValueChange={handleCodigoCentroChange}>
+              <Select value={formData.codigoCentro} onValueChange={handleCodigoCentroChange} required>
                 <SelectTrigger id="codigoCentro" className="h-11 border-2 focus:border-primary">
                   <SelectValue placeholder="Seleccione código" />
                 </SelectTrigger>
@@ -114,7 +138,7 @@ export function ReingresoForm() {
             {/* Centro de Formación */}
             <div className="space-y-3">
               <Label htmlFor="centroFormacion" className="text-sm font-semibold text-foreground">
-                Centro de Formación
+                Centro de Formación *
               </Label>
               <Input
                 id="centroFormacion"
@@ -123,17 +147,19 @@ export function ReingresoForm() {
                 className="h-11"
                 value={formData.centroFormacion}
                 readOnly
+                required
               />
             </div>
 
             {/* Tipo de Documento */}
             <div className="space-y-3">
               <Label htmlFor="tipoDocumento" className="text-sm font-semibold text-foreground">
-                Tipo de Documento
+                Tipo de Documento *
               </Label>
               <Select
                 value={formData.tipoDocumento}
                 onValueChange={(value) => setFormField("tipoDocumento", value)}
+                required
               >
                 <SelectTrigger id="tipoDocumento" className="h-11 border-2 focus:border-primary">
                   <SelectValue placeholder="Seleccione tipo" />
@@ -149,7 +175,7 @@ export function ReingresoForm() {
             {/* Número Documento */}
             <div className="space-y-3">
               <Label htmlFor="numeroDocumento" className="text-sm font-semibold text-foreground">
-                Número Documento
+                Número Documento *
               </Label>
               <Input
                 id="numeroDocumento"
@@ -158,13 +184,14 @@ export function ReingresoForm() {
                 className="h-11 border-2 focus:border-primary"
                 value={formData.numeroDocumento}
                 onChange={(e) => setFormField("numeroDocumento", e.target.value)}
+                required
               />
             </div>
 
             {/* Aspirante */}
             <div className="space-y-3 md:col-span-2">
               <Label htmlFor="aspirante" className="text-sm font-semibold text-foreground">
-                Aspirante (Nombre)
+                Aspirante (Nombre) *
               </Label>
               <Input
                 id="aspirante"
@@ -173,13 +200,14 @@ export function ReingresoForm() {
                 className="h-11 border-2 focus:border-primary"
                 value={formData.aspirante}
                 onChange={(e) => setFormField("aspirante", e.target.value)}
+                required
               />
             </div>
 
             {/* N° Acta */}
             <div className="space-y-3">
               <Label htmlFor="numeroActa" className="text-sm font-semibold text-foreground">
-                N° Acta
+                N° Acta *
               </Label>
               <Input
                 id="numeroActa"
@@ -188,13 +216,14 @@ export function ReingresoForm() {
                 className="h-11 border-2 focus:border-primary"
                 value={formData.numeroActa}
                 onChange={(e) => setFormField("numeroActa", e.target.value)}
+                required
               />
             </div>
 
             {/* Carpeta URL */}
             <div className="space-y-3">
               <Label htmlFor="carpetaURL" className="text-sm font-semibold text-foreground">
-                Enlace de la carpeta
+                Enlace de la carpeta *
               </Label>
               <Input
                 id="carpetaURL"
@@ -203,13 +232,14 @@ export function ReingresoForm() {
                 className="h-11 border-2 focus:border-primary"
                 value={formData.carpetaURL || ""}
                 onChange={(e) => setFormField("carpetaURL", e.target.value)}
+                required
               />
             </div>
 
             {/* N° Resolución */}
             <div className="space-y-3">
               <Label htmlFor="numeroResolucion" className="text-sm font-semibold text-foreground">
-                N° Resolución
+                N° Resolución *
               </Label>
               <Input
                 id="numeroResolucion"
@@ -220,13 +250,14 @@ export function ReingresoForm() {
                 onChange={(e) =>
                   setFormField("numeroResolucion", e.target.value)
                 }
+                required
               />
             </div>
 
             {/* Fecha Solicitud */}
             <div className="space-y-3">
               <Label htmlFor="fechaSolicitud" className="text-sm font-semibold text-foreground">
-                Fecha Solicitud
+                Fecha Solicitud *
               </Label>
               <Input
                 id="fechaSolicitud"
@@ -234,13 +265,14 @@ export function ReingresoForm() {
                 className="h-11 border-2 focus:border-primary"
                 value={formData.fechaSolicitud}
                 onChange={(e) => setFormField("fechaSolicitud", e.target.value)}
+                required
               />
             </div>
 
             {/* Ficha Origen */}
             <div className="space-y-3">
               <Label htmlFor="fichaOrigen" className="text-sm font-semibold text-foreground">
-                Ficha Origen
+                Ficha Origen *
               </Label>
               <Input
                 id="fichaOrigen"
@@ -249,13 +281,14 @@ export function ReingresoForm() {
                 className="h-11 border-2 focus:border-primary"
                 value={formData.fichaOrigen}
                 onChange={(e) => setFormField("fichaOrigen", e.target.value)}
+                required
               />
             </div>
 
             {/* Ficha Destino */}
             <div className="space-y-3">
               <Label htmlFor="fichaDestino" className="text-sm font-semibold text-foreground">
-                Ficha Destino
+                Ficha Destino *
               </Label>
               <Input
                 id="fichaDestino"
@@ -264,17 +297,19 @@ export function ReingresoForm() {
                 className="h-11 border-2 focus:border-primary"
                 value={formData.fichaDestino}
                 onChange={(e) => setFormField("fichaDestino", e.target.value)}
+                required
               />
             </div>
 
             {/* Opción Aplicada */}
             <div className="space-y-3">
               <Label htmlFor="opcionAplicada" className="text-sm font-semibold text-foreground">
-                Opción Aplicada
+                Opción Aplicada *
               </Label>
               <Select
                 value={formData.opcionAplicada}
                 onValueChange={(value) => setFormField("opcionAplicada", value)}
+                required
               >
                 <SelectTrigger id="opcionAplicada" className="h-11 border-2 focus:border-primary">
                   <SelectValue placeholder="Seleccione opción" />
@@ -289,11 +324,12 @@ export function ReingresoForm() {
             {/* Estado SOFIA Plus */}
             <div className="space-y-3 md:col-span-2">
               <Label htmlFor="estadoSofia" className="text-sm font-semibold text-foreground">
-                Estado SOFIA Plus
+                Estado SOFIA Plus *
               </Label>
               <Select
                 value={formData.estadoSofia}
                 onValueChange={(value) => setFormField("estadoSofia", value)}
+                required
               >
                 <SelectTrigger id="estadoSofia" className="h-11 border-2 focus:border-primary">
                   <SelectValue placeholder="Seleccione estado" />

@@ -6,14 +6,14 @@ export type ReingresoCreateRequest = {
   tipoDocumento: string
   numeroDocumento: string
   aspirante: string
-  numeroActa?: string
-  carpetaURL?: string
-  numeroResolucion?: string
-  fechaSolicitud?: string
-  fichaOrigen?: string
-  fichaDestino?: string
-  opcionAplicada?: string
-  estadoSofia?: string
+  numeroActa: string
+  carpetaURL: string
+  numeroResolucion: string
+  fechaSolicitud: string
+  fichaOrigen: string
+  fichaDestino: string
+  opcionAplicada: string
+  estadoSofia: string
 }
 
 export type ReingresoCreateResponse = {
