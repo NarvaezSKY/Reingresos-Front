@@ -341,6 +341,10 @@ export function ReingresoForm() {
                   <SelectItem value="certificar">Por certificar</SelectItem>
                   <SelectItem value="certificado">Certificado</SelectItem>
                   <SelectItem value="cancelado">Cancelado</SelectItem>
+                  <SelectItem value="Retiro Voluntario">Retiro Voluntario</SelectItem>
+                  <SelectItem value="Condicionado">Condicionado</SelectItem>
+                  <SelectItem value="Aplazado">Aplazado</SelectItem>
+
                 </SelectContent>
               </Select>
             </div>
