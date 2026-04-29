@@ -7,11 +7,14 @@ export class ReingresoInfrastructure implements ReingresoRepository {
       const res = await axiosInstance.post<ReingresoCreateResponse>("/", payload)
       return res.data
     } catch (error: any) {
+      // Extraer la respuesta del backend si está disponible
+      const backendResponse = error?.response?.data;
+      
       // Normalizar error en la forma ReingresoCreateResponse
       return {
         success: false,
-        message: error?.message || "Error desconocido",
-        data: error?.response?.data,
+        message: backendResponse?.message || error?.message || "Error desconocido",
+        data: backendResponse,
       }
     }
   }
